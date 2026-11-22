@@ -92,7 +92,7 @@ export default function App() {
     }
     ogUrl.content = currentUrl;
 
-    const absImage = `${window.location.origin}/assets/aistudio/IMG_8067_2c73cdef.jpeg`;
+    const absImage = `${window.location.origin}${import.meta.env.BASE_URL}assets/aistudio/IMG_8067_2c73cdef.jpeg`;
     const ogImg = document.querySelector<HTMLMetaElement>('meta[property="og:image"]');
     if (ogImg) ogImg.content = absImage;
     const twImg = document.querySelector<HTMLMetaElement>('meta[name="twitter:image"]');

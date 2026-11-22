@@ -1,11 +1,13 @@
 import { BookmarkQuote, ChapterData, ThreadClue, ToneChoice } from '../types/story';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 export const ARTWORK_PATHS = {
-  emberHand: '/assets/aistudio/IMG_8067_2c73cdef.jpeg',
-  epilogueEmbrace: '/assets/aistudio/IMG_8068_2f2bb7ba.jpeg',
-  wildflowersStone: '/assets/aistudio/IMG_8069_724f734a.jpeg',
-  bloomHeart: '/assets/aistudio/IMG_8060_8bf11517.jpeg',
-  cutPaperStars: '/assets/aistudio/IMG_8061_db3b83eb.jpeg',
+  emberHand: `${BASE_URL}assets/aistudio/IMG_8067_2c73cdef.jpeg`,
+  epilogueEmbrace: `${BASE_URL}assets/aistudio/IMG_8068_2f2bb7ba.jpeg`,
+  wildflowersStone: `${BASE_URL}assets/aistudio/IMG_8069_724f734a.jpeg`,
+  bloomHeart: `${BASE_URL}assets/aistudio/IMG_8060_8bf11517.jpeg`,
+  cutPaperStars: `${BASE_URL}assets/aistudio/IMG_8061_db3b83eb.jpeg`,
 };
 
 export const BOOKMARK_QUOTES: BookmarkQuote[] = [
