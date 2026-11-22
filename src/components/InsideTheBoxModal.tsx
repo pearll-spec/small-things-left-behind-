@@ -106,7 +106,7 @@ export const InsideTheBoxModal: React.FC<InsideTheBoxModalProps> = ({
                     Cedar Box Lining · Sixteen Keepsakes
                   </p>
                   <p className="mt-1 font-serif-body italic text-xs sm:text-sm text-[#F6F2EA]/80">
-                    Each memory plate is taped cleanly onto linen board as you piece together Nora’s crossing.
+                    Each memory plate is taped cleanly onto linen board as you sort the sixteen small things Nora left behind.
                   </p>
                 </div>
               </div>

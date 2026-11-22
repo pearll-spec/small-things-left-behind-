@@ -50,7 +50,7 @@ export const ThreadsDrawer: React.FC<ThreadsDrawerProps> = ({
         </div>
 
         <p className="mt-4 text-xs leading-relaxed text-[#F6F2EA]/65">
-          Small details across Nora’s keepsakes quietly interlock. Discovered threads reveal what really happened on November 14 and October 18.
+          Small details across Nora’s keepsakes quietly interlock—revealing everything she tucked away for the winter after she was gone.
         </p>
 
         <div className="mt-5 space-y-4">

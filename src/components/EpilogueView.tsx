@@ -103,7 +103,7 @@ export const EpilogueView: React.FC<EpilogueViewProps> = ({
             }}
           />
           <p className="absolute bottom-4 left-4 right-4 font-serif-body italic text-xs text-[#F6F2EA]/95">
-            Alder Harbor Bakery · 7:14 AM
+            7:14 AM · Held in Quiet Remembrance
           </p>
         </div>
 

@@ -27,9 +27,9 @@ export const NotebookIndexModal: React.FC<NotebookIndexModalProps> = ({
   if (!open) return null;
 
   const acts = [
-    { num: 1, title: 'Act I · The Porch Light', season: 'November Dusk' },
-    { num: 2, title: 'Act II · Streetlights & Summers', season: 'August Nights' },
-    { num: 3, title: 'Act III · Quiet Mornings', season: 'Autumn Rain' },
+    { num: 1, title: 'Act I · The Quiet Room', season: 'November Dusk' },
+    { num: 2, title: 'Act II · Echoes in Amber', season: 'August Nights' },
+    { num: 3, title: 'Act III · What Went Unsaid', season: 'Autumn Rain' },
     { num: 4, title: 'Act IV · What Remains', season: 'First Snow' },
   ] as const;
 
@@ -160,15 +160,15 @@ export const NotebookIndexModal: React.FC<NotebookIndexModalProps> = ({
               <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
                 <div>
                   <p className="text-[11px] tracking-[0.2em] text-[#E59D35] uppercase">
-                    Epilogue · Alder Harbor
+                    Epilogue · The Cedar Tray
                   </p>
                   <h3 className="mt-2 font-display text-2xl sm:text-3xl font-medium text-[#F6F2EA]">
                     Even Through Cracked Stone
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-[#F6F2EA]/75">
                     {saveState.epilogueUnlocked
-                      ? 'Your postcard to Cedar Harbor P.O. Box 42 has arrived. Nora’s answering letter is waiting beside the embrace painting.'
-                      : 'Complete all sixteen keepsake chapters and mail your reply postcard in Chapter XVI to unseal Nora’s answering letter.'}
+                      ? 'Every keepsake rests dry in cedar. Nora’s final sealed letter—hidden beneath the tray for the night you packed her room—is waiting.'
+                      : 'Complete all sixteen keepsake chapters to unlock the five-movement crossing and Nora’s final sealed letter.'}
                   </p>
                 </div>
 

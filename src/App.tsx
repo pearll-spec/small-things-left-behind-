@@ -92,12 +92,27 @@ export default function App() {
     }
     ogUrl.content = currentUrl;
 
-    const absImage = `${window.location.origin}${import.meta.env.BASE_URL}assets/aistudio/IMG_8067_2c73cdef.jpeg`;
+    const absImage = `${window.location.origin}${import.meta.env.BASE_URL}src/assets/images/hero_handdrawn_keepsakes_1795354297657.jpg`;
     const ogImg = document.querySelector<HTMLMetaElement>('meta[property="og:image"]');
     if (ogImg) ogImg.content = absImage;
     const twImg = document.querySelector<HTMLMetaElement>('meta[name="twitter:image"]');
     if (twImg) twImg.content = absImage;
   }, []);
+
+  // Unlock soundtrack automatically on first user gesture anywhere in the app (crucial for iPhone Safari)
+  useEffect(() => {
+    const handleFirstGesture = () => {
+      if (saveState.audioMode !== 'off' && !soundEngine.isRunning()) {
+        soundEngine.unlockAndStart();
+      }
+    };
+    window.addEventListener('pointerdown', handleFirstGesture, { passive: true });
+    window.addEventListener('keydown', handleFirstGesture, { passive: true });
+    return () => {
+      window.removeEventListener('pointerdown', handleFirstGesture);
+      window.removeEventListener('keydown', handleFirstGesture);
+    };
+  }, [saveState.audioMode]);
 
   // Sync audio synthesizer settings
   useEffect(() => {

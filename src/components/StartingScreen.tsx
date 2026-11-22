@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Volume2, VolumeX, SlidersHorizontal } from 'lucide-react';
 import { AudioMode, ChapterData } from '../types/story';
 import { ARTWORK_PATHS } from '../data/storyData';
+import { soundEngine } from '../audio/soundEngine';
 
 interface StartingScreenProps {
   currentChapterData: ChapterData;
@@ -18,15 +19,13 @@ interface StartingScreenProps {
 }
 
 const EMBER_MOTES = [
-  { left: '58%', bottom: '20%', delay: '0s', dur: '6.8s', size: 4, blur: false },
-  { left: '66%', bottom: '14%', delay: '1.5s', dur: '8.2s', size: 7, blur: true },
-  { left: '72%', bottom: '26%', delay: '2.4s', dur: '6.1s', size: 3, blur: false },
-  { left: '79%', bottom: '18%', delay: '0.7s', dur: '7.4s', size: 5, blur: false },
-  { left: '63%', bottom: '32%', delay: '3.4s', dur: '8.8s', size: 8, blur: true },
-  { left: '75%', bottom: '36%', delay: '4.2s', dur: '6.5s', size: 3, blur: false },
-  { left: '84%', bottom: '24%', delay: '2.0s', dur: '7.6s', size: 4, blur: false },
-  { left: '54%', bottom: '28%', delay: '5.1s', dur: '9.0s', size: 6, blur: true },
-  { left: '70%', bottom: '42%', delay: '1.1s', dur: '7.2s', size: 2.5, blur: false },
+  { left: '66%', bottom: '36%', delay: '0s', dur: '7.8s', size: 2.5, blur: false },
+  { left: '72%', bottom: '44%', delay: '1.8s', dur: '9.2s', size: 4, blur: true },
+  { left: '78%', bottom: '48%', delay: '2.7s', dur: '7.4s', size: 2, blur: false },
+  { left: '84%', bottom: '56%', delay: '0.9s', dur: '8.3s', size: 3, blur: false },
+  { left: '69%', bottom: '58%', delay: '3.6s', dur: '9.8s', size: 4.5, blur: true },
+  { left: '81%', bottom: '68%', delay: '4.4s', dur: '7.9s', size: 2.5, blur: false },
+  { left: '88%', bottom: '62%', delay: '2.1s', dur: '8.7s', size: 3, blur: false },
 ];
 
 export const StartingScreen: React.FC<StartingScreenProps> = ({
@@ -43,9 +42,23 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
 }) => {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   const [isLeaving, setIsLeaving] = useState(false);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
+  const [soundRunning, setSoundRunning] = useState(() => soundEngine.isRunning());
+
+  useEffect(() => {
+    return soundEngine.subscribe(() => {
+      setSoundRunning(soundEngine.isRunning());
+    });
+  }, []);
 
   const audioLabel =
-    audioMode === 'piano-rain' ? 'Piano · Rain' : audioMode === 'piano' ? 'Felt Piano' : 'Sound Off';
+    audioMode === 'off'
+      ? 'Sound Off'
+      : !soundRunning
+        ? 'Enable Sound'
+        : audioMode === 'piano-rain'
+          ? 'Piano · Rain'
+          : 'Felt Piano';
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -54,12 +67,25 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
     setParallax({ x: nx, y: ny });
   };
 
+  const handleAudioClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // If sound is enabled in settings but Safari hasn't unlocked AudioContext yet,
+    // first click unlocks & starts playback immediately instead of cycling away from Piano · Rain.
+    if (audioMode !== 'off' && !soundRunning) {
+      soundEngine.unlockAndStart();
+      return;
+    }
+    onCycleAudioMode();
+  };
+
   const handleLaunchClick = () => {
     if (isLeaving) return;
+    // Unlock audio synchronously inside the click gesture before any transition timeout
+    soundEngine.unlockAndStart();
     setIsLeaving(true);
     window.setTimeout(() => {
       onStartOrContinue();
-    }, 460);
+    }, 520);
   };
 
   return (
@@ -67,75 +93,71 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
       onMouseMove={handleMouseMove}
       className="relative min-h-[100dvh] w-full bg-[#0E0A08] text-[#F6F2EA] overflow-hidden flex flex-col justify-between select-none"
     >
-      {/* Curatorial Initial Curtain Dissolve */}
+      {/* Curatorial Veil Dissolve */}
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: isLeaving ? 1 : 0 }}
-        transition={{ duration: isLeaving ? 0.45 : 1.3, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: isLeaving ? 0.5 : 1.45, ease: [0.16, 1, 0.3, 1] }}
         className="pointer-events-none fixed inset-0 z-50 bg-[#0E0A08]"
       />
 
-      {/* Right-anchored Ember-Hand Oil Painting with Multi-Layer Parallax */}
+      {/* Full-Bleed Hand-Drawn Symbolic Ink Illustration */}
       <motion.div
-        initial={{ opacity: 0, scale: 1.07 }}
+        initial={{ opacity: 0, scale: 1.02 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-none absolute inset-y-0 right-0 w-full md:w-[68%] lg:w-[60%] overflow-hidden"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
       >
         <div
           className="h-full w-full transition-transform duration-700 ease-out"
           style={{
-            transform: `translate3d(${parallax.x * -14}px, ${parallax.y * -10}px, 0) scale(1.03)`,
+            transform: `translate3d(${parallax.x * -10}px, ${parallax.y * -7}px, 0) scale(1.03)`,
           }}
         >
-          <img
-            src={ARTWORK_PATHS.emberHand}
-            alt="Oil painting of a warm glowing hand reaching into golden light against deep shadow"
-            referrerPolicy="no-referrer"
-            className="h-full w-full object-cover object-[56%_42%] opacity-92 animate-painting-breath"
-          />
+          {!heroImgFailed ? (
+            <img
+              src={ARTWORK_PATHS.emberHand}
+              alt="Hand-drawn ink illustration on dark paper showing an open cedar keepsake box with an untied ribbon, a stopped pocket watch, chamomile flowers, a paper boat, and dandelion seeds drifting upward"
+              referrerPolicy="no-referrer"
+              onError={() => setHeroImgFailed(true)}
+              className="h-full w-full object-cover object-[76%_54%] sm:object-[72%_52%] opacity-95"
+            />
+          ) : (
+            <div className="h-full w-full bg-[radial-gradient(circle_at_72%_48%,rgba(229,157,53,0.12),rgba(14,10,8,0.98)_65%)]" />
+          )}
         </div>
 
-        {/* Volumetric Warm Candlelight Ray Sweep */}
+        {/* Subtle Warm Paper Glow Over the Keepsake Box */}
         <div
-          className="absolute -inset-y-16 left-[12%] w-[62%] mix-blend-screen animate-light-sweep"
+          className="absolute inset-0 animate-ember-pulse opacity-65"
           style={{
+            transform: `translate3d(${parallax.x * -14}px, ${parallax.y * -10}px, 0)`,
             background:
-              'linear-gradient(105deg, rgba(229,157,53,0) 0%, rgba(229,157,53,0.14) 48%, rgba(255,226,138,0.06) 64%, rgba(229,157,53,0) 100%)',
+              'radial-gradient(circle at 75% 56%, rgba(229, 157, 53, 0.10) 0%, rgba(184, 73, 53, 0.04) 28%, rgba(14, 10, 8, 0) 56%)',
           }}
         />
 
-        {/* Soft Radial Warm Amber Heartbeat Glow */}
-        <div
-          className="absolute inset-0 animate-ember-pulse"
-          style={{
-            transform: `translate3d(${parallax.x * -22}px, ${parallax.y * -16}px, 0)`,
-            background:
-              'radial-gradient(circle at 52% 46%, rgba(229, 157, 53, 0.38) 0%, rgba(184, 73, 53, 0.16) 28%, rgba(14, 10, 8, 0) 64%)',
-          }}
-        />
-
-        {/* Smooth Oil-Shadow Vignette Blending Left & Outer Edges Seamlessly */}
+        {/* Soft Edge Vignettes for Editorial Legibility */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(90deg, #0E0A08 0%, rgba(14, 10, 8, 0.94) 22%, rgba(14, 10, 8, 0.44) 52%, rgba(14, 10, 8, 0.22) 100%)',
+              'linear-gradient(90deg, #0E0A08 0%, rgba(14, 10, 8, 0.88) 28%, rgba(14, 10, 8, 0.44) 48%, rgba(14, 10, 8, 0.04) 76%, rgba(14, 10, 8, 0.24) 100%)',
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(14, 10, 8, 0.78) 0%, rgba(14, 10, 8, 0) 24%, rgba(14, 10, 8, 0.15) 70%, #0E0A08 100%)',
+              'linear-gradient(180deg, rgba(14, 10, 8, 0.68) 0%, rgba(14, 10, 8, 0.04) 22%, rgba(14, 10, 8, 0.14) 64%, rgba(14, 10, 8, 0.88) 92%, #0E0A08 100%)',
           }}
         />
 
-        {/* Dual-depth Golden Ember & Bokeh Motes */}
+        {/* Quiet Drifting Gold-Leaf Dust Motes Rising Above the Box */}
         <div
-          className="absolute inset-0 transition-transform duration-700 ease-out"
+          className="absolute inset-0 transition-transform duration-700 ease-out opacity-55"
           style={{
-            transform: `translate3d(${parallax.x * -26}px, ${parallax.y * -18}px, 0)`,
+            transform: `translate3d(${parallax.x * -18}px, ${parallax.y * -12}px, 0)`,
           }}
         >
           {EMBER_MOTES.map((mote, i) => (
@@ -143,8 +165,8 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
               key={i}
               className={`absolute rounded-full bg-[#E59D35] animate-float-ember ${
                 mote.blur
-                  ? 'blur-[2px] opacity-60 shadow-[0_0_16px_rgba(229,157,53,0.75)]'
-                  : 'shadow-[0_0_8px_rgba(255,226,138,0.9)]'
+                  ? 'blur-[1.5px] opacity-40'
+                  : 'opacity-70 shadow-[0_0_6px_rgba(246,242,234,0.45)]'
               }`}
               style={{
                 left: mote.left,
@@ -160,13 +182,13 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
       </motion.div>
 
       {/* Subtle Canvas Grain Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-[5] dark-grain opacity-75" />
+      <div className="pointer-events-none absolute inset-0 z-[5] dark-grain opacity-70" />
 
-      {/* Top Bar */}
+      {/* Minimal Top Bar */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 flex items-center justify-between gap-4 px-5 sm:px-10 pt-[max(1.25rem,env(safe-area-inset-top))] pb-3"
       >
         <p className="text-[11px] sm:text-xs tracking-[0.22em] text-[#F6F2EA]/72 uppercase whitespace-nowrap truncate">
@@ -176,8 +198,12 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
         <div className="flex items-center gap-2.5 shrink-0">
           <button
             type="button"
-            onClick={onCycleAudioMode}
-            className="flex items-center gap-2 border border-[#E59D35]/35 bg-[#0E0A08]/65 backdrop-blur-sm px-3.5 py-1.5 text-xs text-[#F6F2EA]/90 hover:border-[#E59D35]/70 transition-colors cursor-pointer whitespace-nowrap"
+            onClick={handleAudioClick}
+            className={`flex items-center gap-2 border px-3.5 py-1.5 text-xs transition-colors cursor-pointer whitespace-nowrap backdrop-blur-sm ${
+              audioMode !== 'off' && !soundRunning
+                ? 'border-[#E59D35]/75 bg-[#E59D35]/15 text-[#F6F2EA] hover:bg-[#E59D35]/25'
+                : 'border-[#E59D35]/35 bg-[#0E0A08]/65 text-[#F6F2EA]/90 hover:border-[#E59D35]/70'
+            }`}
           >
             {audioMode === 'off' ? (
               <VolumeX className="w-3.5 h-3.5 text-[#F6F2EA]/60" />
@@ -189,7 +215,10 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
 
           <button
             type="button"
-            onClick={onOpenSettings}
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenSettings();
+            }}
             aria-label="Open settings"
             className="flex items-center justify-center border border-[#F6F2EA]/20 bg-[#0E0A08]/65 backdrop-blur-sm p-2 text-[#F6F2EA]/80 hover:text-[#F6F2EA] hover:border-[#E59D35]/55 transition-colors cursor-pointer"
           >
@@ -198,61 +227,61 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
         </div>
       </motion.header>
 
-      {/* Bottom Editorial Typography & Staggered Choreographed Entrance */}
+      {/* Editorial Lower-Left Composition */}
       <main
         className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 px-5 sm:px-10 pb-[max(2rem,env(safe-area-inset-bottom))] pt-8 transition-transform duration-700 ease-out"
         style={{
-          transform: `translate3d(${parallax.x * 6}px, ${parallax.y * 4}px, 0)`,
+          transform: `translate3d(${parallax.x * 5}px, ${parallax.y * 3}px, 0)`,
         }}
       >
         <div className="max-w-xl">
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="text-[11px] sm:text-xs tracking-[0.24em] text-[#E59D35]/90 uppercase"
           >
-            PART I–IV · AN EPISTOLARY MEMORY
+            PART I–IV · AN EPISTOLARY MEMORY OF GRIEF
           </motion.p>
 
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.05, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-3 font-display text-4xl sm:text-6xl lg:text-[4.25rem] font-medium leading-[1.02] tracking-tight text-[#F6F2EA] [text-wrap:balance]"
+            transition={{ duration: 1.1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-3 font-display text-4xl sm:text-6xl lg:text-[4.35rem] font-medium leading-[1.02] tracking-tight text-[#F6F2EA] [text-wrap:balance] drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)]"
           >
             Small Things Left Behind
           </motion.h1>
 
-          {/* Thin Bronze Hairline Drawing Outward */}
+          {/* Thin Bronze Hairline */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.95, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.95, delay: 0.82, ease: [0.16, 1, 0.3, 1] }}
             style={{ transformOrigin: 'left center' }}
-            className="mt-5 h-px w-24 bg-[#E59D35]/65"
+            className="mt-5 h-px w-24 bg-[#E59D35]/70"
           />
 
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.98, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 font-serif-body italic text-sm sm:text-base leading-relaxed text-[#F6F2EA]/80 max-w-md"
+            transition={{ duration: 0.9, delay: 0.96, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 font-serif-body italic text-sm sm:text-base leading-relaxed text-[#F6F2EA]/85 max-w-md"
           >
-            Sixteen keepsakes, letters never sent, and the fragile light someone left behind.
+            Sixteen keepsakes, letters left in drawers, and the quiet warmth someone trusted you to carry after she was gone.
           </motion.p>
 
           {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.15, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, delay: 1.12, ease: [0.16, 1, 0.3, 1] }}
             className="mt-7 flex flex-wrap items-center gap-3"
           >
             <button
               type="button"
               onClick={handleLaunchClick}
-              className="bg-[#F6F2EA] text-[#0E0A08] px-6 py-3 text-xs sm:text-sm font-medium tracking-[0.14em] uppercase hover:bg-[#EFEAE0] hover:-translate-y-0.5 transition-all cursor-pointer whitespace-nowrap shadow-[0_10px_28px_rgba(0,0,0,0.55)]"
+              className="bg-[#F6F2EA] text-[#0E0A08] px-6 py-3 text-xs sm:text-sm font-medium tracking-[0.14em] uppercase hover:bg-[#EFEAE0] hover:-translate-y-0.5 transition-all cursor-pointer whitespace-nowrap shadow-[0_12px_32px_rgba(0,0,0,0.65)]"
             >
               {hasStartedStory
                 ? `CONTINUE · CHAPTER ${currentChapterData.roman}`
@@ -261,16 +290,24 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
 
             <button
               type="button"
-              onClick={onOpenNotebook}
-              className="border border-[#E59D35]/45 bg-[#0E0A08]/60 backdrop-blur-sm px-5 py-3 text-xs sm:text-sm text-[#F6F2EA]/90 hover:border-[#E59D35] hover:bg-[#E59D35]/10 transition-colors cursor-pointer whitespace-nowrap"
+              onClick={(e) => {
+                e.stopPropagation();
+                soundEngine.unlockAndStart();
+                onOpenNotebook();
+              }}
+              className="border border-[#E59D35]/45 bg-[#0E0A08]/70 backdrop-blur-sm px-5 py-3 text-xs sm:text-sm text-[#F6F2EA]/90 hover:border-[#E59D35] hover:bg-[#E59D35]/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               Notebook Index
             </button>
 
             <button
               type="button"
-              onClick={onOpenBox}
-              className="border border-[#E59D35]/45 bg-[#0E0A08]/60 backdrop-blur-sm px-5 py-3 text-xs sm:text-sm text-[#F6F2EA]/90 hover:border-[#E59D35] hover:bg-[#E59D35]/10 transition-colors cursor-pointer whitespace-nowrap"
+              onClick={(e) => {
+                e.stopPropagation();
+                soundEngine.unlockAndStart();
+                onOpenBox();
+              }}
+              className="border border-[#E59D35]/45 bg-[#0E0A08]/70 backdrop-blur-sm px-5 py-3 text-xs sm:text-sm text-[#F6F2EA]/90 hover:border-[#E59D35] hover:bg-[#E59D35]/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               Inside the Box
             </button>
@@ -278,10 +315,14 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
             {epilogueUnlocked && (
               <button
                 type="button"
-                onClick={onOpenEpilogue}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  soundEngine.unlockAndStart();
+                  onOpenEpilogue();
+                }}
                 className="border border-[#F6F2EA]/35 bg-[#233B5C]/45 px-5 py-3 text-xs sm:text-sm text-[#F6F2EA] hover:bg-[#233B5C]/70 transition-colors cursor-pointer whitespace-nowrap"
               >
-                Epilogue Letter
+                Final Letter
               </button>
             )}
           </motion.div>
@@ -291,8 +332,8 @@ export const StartingScreen: React.FC<StartingScreenProps> = ({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.1, delay: 1.3 }}
-          className="font-serif-body italic text-xs sm:text-sm text-[#F6F2EA]/62 lg:text-right max-w-xs"
+          transition={{ duration: 1.1, delay: 1.25 }}
+          className="font-serif-body italic text-xs sm:text-sm text-[#F6F2EA]/68 lg:text-right max-w-xs"
         >
           Even through cracked stone, a quiet light remains.
         </motion.p>
