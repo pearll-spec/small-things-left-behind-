@@ -1,0 +1,437 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-serif: 'Lora', Georgia, serif;
+    --font-script: 'Caveat', cursive;
+  }
+
+  html,
+  body {
+    background-color: #0e0a08;
+    color: #f6f2ea;
+    font-family: var(--font-serif);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-serif-body {
+  font-family: var(--font-serif);
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+/* Archival watercolor & paper grain */
+.paper-grain {
+  background-image:
+    radial-gradient(rgba(25, 22, 20, 0.04) 1px, transparent 0),
+    radial-gradient(rgba(184, 73, 53, 0.02) 1px, transparent 0);
+  background-size: 24px 24px, 37px 37px;
+  background-position: 0 0, 11px 17px;
+}
+
+.dark-grain {
+  background-image: radial-gradient(rgba(246, 242, 234, 0.03) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+/* Starting screen subtle oil-painting breathing & ember motes */
+@keyframes paintingBreath {
+  0%,
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.028) translate3d(-4px, -3px, 0);
+  }
+}
+
+@keyframes emberPulse {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes floatEmber {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.75);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(-14px, -110px, 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* 12fps stop-motion & mechanical clockwork animations */
+@keyframes stopMotionSway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes stopMotionSteam {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(4px, -28px, 0) scale(1.25);
+    opacity: 0;
+  }
+}
+
+@keyframes swallowGlide {
+  0% {
+    transform: translate3d(-40px, 6px, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.85;
+  }
+  88% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(170px, -14px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes rainSlant {
+  0% {
+    transform: translate3d(8px, -18px, 0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(-12px, 56px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes snowDrift {
+  0% {
+    transform: translate3d(0, -10px, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(10px, 54px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes fireflyGlow {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes dustMote {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(7px, -11px, 0);
+    opacity: 0.72;
+  }
+}
+
+@keyframes inkRipple {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+@keyframes mugHop {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  35% {
+    transform: translateY(-7px) rotate(-3deg);
+  }
+  70% {
+    transform: translateY(-2px) rotate(2deg);
+  }
+}
+
+@keyframes polaroidTilt {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-7deg);
+  }
+  55% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes bellRing {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes spinReel {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-painting-breath {
+  animation: paintingBreath 14s ease-in-out infinite;
+}
+
+.animate-ember-pulse {
+  animation: emberPulse 5.2s ease-in-out infinite;
+}
+
+.animate-float-ember {
+  animation: floatEmber 6.5s linear infinite;
+}
+
+.animate-sway-12fps {
+  animation: stopMotionSway 2.4s steps(12, end) infinite;
+  transform-origin: bottom center;
+}
+
+.animate-steam-12fps {
+  animation: stopMotionSteam 2.2s steps(12, end) infinite;
+}
+
+.animate-swallow-12fps {
+  animation: swallowGlide 11s steps(48, end) infinite;
+}
+
+.animate-rain-12fps {
+  animation: rainSlant 0.9s steps(8, end) infinite;
+}
+
+.animate-snow-12fps {
+  animation: snowDrift 3.6s steps(16, end) infinite;
+}
+
+.animate-firefly-12fps {
+  animation: fireflyGlow 2.4s steps(8, end) infinite;
+}
+
+.animate-dust-12fps {
+  animation: dustMote 4.5s steps(14, end) infinite;
+}
+
+.animate-ink-ripple {
+  animation: inkRipple 480ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-mug-hop {
+  animation: mugHop 420ms steps(6, end);
+}
+
+.animate-polaroid-tilt {
+  animation: polaroidTilt 720ms steps(8, end);
+}
+
+.animate-bell-ring {
+  animation: bellRing 460ms steps(8, end);
+}
+
+.animate-spin-reel {
+  animation: spinReel 2.2s steps(16, end) infinite;
+}
+
+/* Rusty Lake stepped stop-motion keyframes */
+@keyframes inkBoil {
+  0% {
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(0.4px, -0.3px, 0) rotate(0.08deg);
+  }
+  50% {
+    transform: translate3d(-0.3px, 0.4px, 0) rotate(-0.07deg);
+  }
+  75% {
+    transform: translate3d(0.2px, 0.2px, 0) rotate(0.05deg);
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0) rotate(0deg);
+  }
+}
+
+@keyframes crowBlink {
+  0%,
+  88%,
+  100% {
+    transform: scaleY(1);
+  }
+  92%,
+  96% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes crowBob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  45% {
+    transform: translate3d(0, -1.5px, 0) rotate(-3deg);
+  }
+  70% {
+    transform: translate3d(0, 0, 0) rotate(2deg);
+  }
+}
+
+@keyframes mothFlutter {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  25% {
+    transform: translate3d(5px, -6px, 0) scaleX(0.45);
+  }
+  50% {
+    transform: translate3d(10px, -2px, 0) scaleX(1);
+  }
+  75% {
+    transform: translate3d(4px, 4px, 0) scaleX(0.5);
+  }
+}
+
+.animate-ink-boil {
+  animation: inkBoil 0.55s steps(4, end) infinite;
+}
+
+.animate-crow-blink {
+  animation: crowBlink 4.2s steps(1, end) infinite;
+}
+
+.animate-crow-bob {
+  animation: crowBob 3.4s steps(4, end) infinite;
+}
+
+.animate-moth-12fps {
+  animation: mothFlutter 0.7s steps(4, end) infinite;
+}
+
+@keyframes lightSweep {
+  0%,
+  100% {
+    transform: translate3d(-6%, 0, 0) rotate(-14deg);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate3d(8%, -3%, 0) rotate(-11deg);
+    opacity: 0.42;
+  }
+}
+
+.animate-light-sweep {
+  animation: lightSweep 14s ease-in-out infinite;
+}
+
+/* Custom subtle scrollbars for archival drawers */
+.archival-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.archival-scroll::-webkit-scrollbar-track {
+  background: rgba(14, 10, 8, 0.2);
+}
+
+.archival-scroll::-webkit-scrollbar-thumb {
+  background: rgba(229, 157, 53, 0.32);
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-painting-breath,
+  .animate-ember-pulse,
+  .animate-float-ember,
+  .animate-sway-12fps,
+  .animate-steam-12fps,
+  .animate-swallow-12fps,
+  .animate-rain-12fps,
+  .animate-snow-12fps,
+  .animate-firefly-12fps,
+  .animate-dust-12fps,
+  .animate-spin-reel,
+  .animate-ink-boil,
+  .animate-crow-blink,
+  .animate-crow-bob,
+  .animate-moth-12fps,
+  .animate-light-sweep {
+    animation: none !important;
+  }
+}
