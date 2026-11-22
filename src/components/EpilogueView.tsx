@@ -87,11 +87,11 @@ export const EpilogueView: React.FC<EpilogueViewProps> = ({
 
       {/* Main Closing Letter Spread */}
       <main className="w-full max-w-5xl bg-[#F6F2EA] text-[#191614] paper-grain border border-[#15100E] shadow-[0_30px_80px_rgba(0,0,0,0.8)] grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
-        {/* Painted Two-Figure Embrace Artwork */}
-        <div className="lg:col-span-5 relative min-h-[300px] bg-[#EFEAE0] border-b lg:border-b-0 lg:border-r border-[#15100E]/20">
+        {/* Hand-Drawn Flower Beneath Snow & Morning Sun Artwork */}
+        <div className="lg:col-span-5 relative min-h-[320px] bg-[#EFEAE0] border-b lg:border-b-0 lg:border-r border-[#15100E]/20">
           <img
-            src={ARTWORK_PATHS.epilogueEmbrace}
-            alt="Painted canvas of two figures holding one another in colorful embrace"
+            src={ARTWORK_PATHS.snowFlowerSun}
+            alt="Hand-drawn ink and watercolor illustration of a delicate white snowdrop blooming out of melting winter snow beneath a nostalgic morning sun"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover"
           />
@@ -99,11 +99,11 @@ export const EpilogueView: React.FC<EpilogueViewProps> = ({
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(14,10,8,0) 72%, rgba(14,10,8,0.62) 100%)',
+                'linear-gradient(180deg, rgba(14,10,8,0) 74%, rgba(14,10,8,0.58) 100%)',
             }}
           />
           <p className="absolute bottom-4 left-4 right-4 font-serif-body italic text-xs text-[#F6F2EA]/95">
-            7:14 AM · Held in Quiet Remembrance
+            After Winter · Still Reaching for Morning
           </p>
         </div>
 

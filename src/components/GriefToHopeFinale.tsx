@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play, RotateCcw } from 'lucide-react';
 import { ARTWORK_PATHS } from '../data/storyData';
 import { soundEngine } from '../audio/soundEngine';
 import { ToneChoice } from '../types/story';
@@ -36,6 +36,7 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
   const [stage, setStage] = useState<MovementIndex>(0);
   const [paused, setPaused] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const [bloomReplayKey, setBloomReplayKey] = useState(0);
 
   useEffect(() => {
     soundEngine.startFinaleLament();
@@ -97,9 +98,9 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
       {/* Cold Slate Dusk Backdrop (Movements I–III) */}
       <motion.div
         animate={{
-          opacity: stage <= 1 ? 0.95 : stage === 2 ? 0.85 : stage === 3 ? 0.45 : 0.18,
+          opacity: stage <= 1 ? 0.95 : stage === 2 ? 0.85 : stage === 3 ? 0.45 : 0.08,
         }}
-        transition={{ duration: 2.8, ease: 'easeInOut' }}
+        transition={{ duration: 3.2, ease: 'easeInOut' }}
         className="pointer-events-none absolute inset-0"
         style={{
           background:
@@ -107,16 +108,18 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
         }}
       />
 
-      {/* Warm Ember & Dawn Wash Rising Slowly in Movements III–V */}
+      {/* Warm Ember & Nostalgic Morning Sun Wash Rising Slowly in Movements III–V */}
       <motion.div
         animate={{
-          opacity: stage === 0 ? 0.03 : stage === 1 ? 0.12 : stage === 2 ? 0.25 : stage === 3 ? 0.58 : 0.92,
+          opacity: stage === 0 ? 0.03 : stage === 1 ? 0.12 : stage === 2 ? 0.25 : stage === 3 ? 0.58 : 1,
         }}
-        transition={{ duration: 3.0, ease: 'easeInOut' }}
+        transition={{ duration: 3.8, ease: 'easeInOut' }}
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(circle at 50% 48%, rgba(229,157,53,0.30) 0%, rgba(184,73,53,0.14) 36%, rgba(14,10,8,0) 72%)',
+            stage === 4
+              ? 'radial-gradient(circle at 52% 46%, rgba(235,176,78,0.34) 0%, rgba(196,112,72,0.18) 38%, rgba(14,10,8,0.92) 78%)'
+              : 'radial-gradient(circle at 50% 48%, rgba(229,157,53,0.30) 0%, rgba(184,73,53,0.14) 36%, rgba(14,10,8,0) 72%)',
         }}
       />
 
@@ -429,22 +432,173 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
               </motion.div>
             )}
 
-            {/* MOVEMENT V: Epilogue Embrace — Carrying Love Forward */}
+            {/* MOVEMENT V: Single Flower Growing Beneath the Snow & Nostalgic Morning Sun Afterwards */}
             {stage === 4 && (
               <motion.div
-                key="mov-5"
+                key={`mov-5-${bloomReplayKey}`}
                 initial={{ opacity: 0, y: 14, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                 className="relative flex items-center justify-center w-full h-full"
               >
-                <div className="relative w-48 sm:w-60 h-64 sm:h-80 bg-[#F6F2EA] p-2.5 border border-[#E59D35]/45 shadow-[0_28px_80px_rgba(229,157,53,0.22)]">
-                  <img
-                    src={ARTWORK_PATHS.epilogueEmbrace}
-                    alt="Fine painting of two figures holding one another in tender remembrance"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative w-52 sm:w-64 h-[276px] sm:h-[340px] bg-[#F6F2EA] p-2.5 border border-[#E59D35]/50 shadow-[0_28px_85px_rgba(229,157,53,0.28)] overflow-hidden">
+                  {/* Inner Paper Canvas */}
+                  <div className="relative w-full h-full bg-[#F6F2EA] overflow-hidden">
+                    {/* Soft Nostalgic Sun Glow Rising Across the Paper Horizon */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 3.4, delay: 3.2, ease: 'easeOut' }}
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          'radial-gradient(circle at 64% 58%, rgba(235, 178, 72, 0.55) 0%, rgba(229, 157, 53, 0.24) 34%, rgba(212, 145, 122, 0.14) 58%, rgba(246, 242, 234, 0) 80%)',
+                      }}
+                    />
+
+                    {/* Animated Hand-Inked SVG Sequence: Snow -> Sprouting Stem -> Bloom -> Rising Sun */}
+                    <svg viewBox="0 0 240 320" className="absolute inset-0 w-full h-full">
+                      {/* Distant misty winter horizon */}
+                      <motion.path
+                        d="M 0 198 Q 60 194 120 197 T 240 194"
+                        fill="none"
+                        stroke="#8B847C"
+                        strokeWidth="0.9"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.5 }}
+                        transition={{ duration: 1.6, delay: 0.4 }}
+                      />
+
+                      {/* Nostalgic Morning Sun Rising Slowly Behind the Horizon */}
+                      <motion.g
+                        initial={{ y: 38, opacity: 0 }}
+                        animate={{ y: 0, opacity: 0.92 }}
+                        transition={{ duration: 3.6, delay: 3.2, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <circle cx="154" cy="182" r="24" fill="#F2C879" opacity="0.48" />
+                        <circle cx="154" cy="182" r="14" fill="#FCE29C" opacity="0.82" />
+                      </motion.g>
+
+                      {/* Gentle fading snow flurries stopping as morning warms */}
+                      {[42, 86, 134, 188, 206].map((x, idx) => (
+                        <motion.circle
+                          key={idx}
+                          cx={x}
+                          cy={52 + idx * 18}
+                          r={idx % 2 === 0 ? 1.5 : 1.1}
+                          fill="#94A7BA"
+                          initial={{ opacity: 0.6, y: 0 }}
+                          animate={{ opacity: [0.55, 0.45, 0], y: 36 }}
+                          transition={{ duration: 3.8, delay: idx * 0.25, ease: 'easeOut' }}
+                        />
+                      ))}
+
+                      {/* Mound of Melting Winter Snow */}
+                      <motion.path
+                        d="M 16 266 Q 64 236 116 218 Q 168 232 224 270 Q 170 284 114 282 Q 58 282 16 266 Z"
+                        fill="#BAC9D6"
+                        opacity="0.72"
+                        initial={{ opacity: 0.9 }}
+                        animate={{ opacity: 0.65 }}
+                        transition={{ duration: 3.5, delay: 3.0 }}
+                      />
+                      <motion.path
+                        d="M 18 265 Q 64 236 116 218 Q 168 232 222 269"
+                        fill="none"
+                        stroke="#3F4B57"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0.4, opacity: 0.5 }}
+                        animate={{ pathLength: 1, opacity: 0.85 }}
+                        transition={{ duration: 1.6, ease: 'easeOut' }}
+                      />
+
+                      {/* Slender Botanical Leaves Unfurling Up Out of Snow */}
+                      <motion.path
+                        d="M 113 224 Q 98 186 84 156"
+                        fill="none"
+                        stroke="#2C2722"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1.5, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
+                      />
+                      <motion.path
+                        d="M 118 224 Q 132 184 146 154"
+                        fill="none"
+                        stroke="#2C2722"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1.5, delay: 2.05, ease: [0.16, 1, 0.3, 1] }}
+                      />
+
+                      {/* Single Delicate Stem Pushing Upward from Beneath the Snow */}
+                      <motion.path
+                        d="M 115 224 Q 112 162 115 96 Q 118 82 128 84"
+                        fill="none"
+                        stroke="#25201B"
+                        strokeWidth="1.9"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 2.5, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                      />
+
+                      {/* Nodding White Snowdrop Blossom Opening Gently */}
+                      <motion.g
+                        initial={{ opacity: 0, scale: 0.35 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.4, delay: 2.95, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ transformOrigin: '131px 90px' }}
+                      >
+                        <ellipse cx="130" cy="87" rx="3.2" ry="4.5" fill="#7D8563" stroke="#25201B" strokeWidth="1.1" />
+                        <path
+                          d="M 129 91 Q 117 104 119 119 Q 127 110 130 93 Z"
+                          fill="#FFFFFF"
+                          stroke="#25201B"
+                          strokeWidth="1.15"
+                        />
+                        <path
+                          d="M 131 91 Q 147 102 150 116 Q 137 112 131 93 Z"
+                          fill="#FFFDF8"
+                          stroke="#25201B"
+                          strokeWidth="1.15"
+                        />
+                        <path
+                          d="M 130 92 Q 132 108 134 121 Q 127 115 129 93 Z"
+                          fill="#FBF8F0"
+                          stroke="#25201B"
+                          strokeWidth="1.15"
+                        />
+                      </motion.g>
+                    </svg>
+
+                    {/* Seamless Crossfade into Full Hand-Drawn Cotton-Paper Watercolor + Sunlit Haze */}
+                    <motion.img
+                      src={ARTWORK_PATHS.snowFlowerSun}
+                      alt="Hand-drawn watercolor illustration of a single white snowdrop flower blooming from beneath melting snow under a nostalgic morning sun"
+                      referrerPolicy="no-referrer"
+                      initial={{ opacity: 0, scale: 1.03 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 2.6, delay: 4.5, ease: 'easeInOut' }}
+                      className="relative z-10 w-full h-full object-cover"
+                    />
+
+                    {/* Warm Nostalgic Sunbeams Lingering Gently Afterwards */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 0.42, 0.28] }}
+                      transition={{ duration: 4.8, delay: 5.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+                      className="pointer-events-none absolute inset-0 z-20 mix-blend-screen"
+                      style={{
+                        background:
+                          'radial-gradient(circle at 68% 54%, rgba(255, 224, 150, 0.55) 0%, rgba(229, 157, 53, 0.16) 40%, rgba(246, 242, 234, 0) 75%)',
+                      }}
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -559,12 +713,12 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
                 transition={{ duration: 1.1 }}
               >
                 <p className="text-[11px] tracking-[0.24em] text-[#E59D35] uppercase">
-                  V · What Remains
+                  V · Beneath the Snow
                 </p>
                 <h2 className="mt-3 font-display text-2xl sm:text-4xl font-medium leading-snug text-[#F6F2EA] [text-wrap:balance]">
-                  You do not pack the cedar box to forget her. You carry her light back out into the morning.
+                  Even beneath the deepest winter, one quiet bloom still finds the morning sun.
                 </h2>
-                <p className="mt-3 font-serif-body italic text-xs sm:text-sm text-[#F6F2EA]/80 leading-relaxed">
+                <p className="mt-3 font-serif-body italic text-xs sm:text-sm text-[#F6F2EA]/82 leading-relaxed">
                   {toneSubline}
                 </p>
               </motion.div>
@@ -574,7 +728,7 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
       </main>
 
       {/* Bottom Controls */}
-      <footer className="relative z-20 pb-[max(2rem,env(safe-area-inset-bottom))] px-6 flex items-center justify-center gap-3">
+      <footer className="relative z-20 pb-[max(2rem,env(safe-area-inset-bottom))] px-6 flex flex-wrap items-center justify-center gap-3">
         {stage > 0 && (
           <button
             type="button"
@@ -584,6 +738,20 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
           >
             <ChevronLeft className="w-3.5 h-3.5" />
             <span>Back</span>
+          </button>
+        )}
+
+        {stage === 4 && (
+          <button
+            type="button"
+            onClick={() => {
+              soundEngine.playMusicBoxChime(76);
+              setBloomReplayKey((k) => k + 1);
+            }}
+            className="inline-flex items-center gap-1.5 border border-[#E59D35]/35 bg-[#15100D]/80 px-3.5 py-2.5 text-xs text-[#F6F2EA]/80 hover:border-[#E59D35]/70 transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-[#E59D35]" />
+            <span>Replay Bloom</span>
           </button>
         )}
 
@@ -601,7 +769,7 @@ export const GriefToHopeFinale: React.FC<GriefToHopeFinaleProps> = ({
             type="button"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.55 }}
+            transition={{ duration: 1.0, delay: 4.2 }}
             onClick={handleFinish}
             className="inline-flex items-center gap-2 bg-[#F6F2EA] text-[#0E0A08] px-7 py-3 text-xs sm:text-sm font-medium tracking-[0.16em] uppercase hover:bg-[#EFEAE0] transition-colors cursor-pointer shadow-[0_14px_36px_rgba(0,0,0,0.65)]"
           >

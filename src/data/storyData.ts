@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.BASE_URL;
 
 export const ARTWORK_PATHS = {
   emberHand: `${BASE_URL}src/assets/images/hero_handdrawn_keepsakes_1795354297657.jpg`,
-  epilogueEmbrace: `${BASE_URL}src/assets/images/epilogue_embrace_1795350090162.jpg`,
+  snowFlowerSun: `${BASE_URL}src/assets/images/flower_beneath_snow_sun_1795355095830.jpg`,
   wildflowersStone: `${BASE_URL}src/assets/images/wildflowers_stone_1795350088753.jpg`,
   bloomHeart: `${BASE_URL}src/assets/images/blossom_heart_1795350088046.jpg`,
   cutPaperStars: `${BASE_URL}src/assets/images/solitude_stars_1795350089966.jpg`,
